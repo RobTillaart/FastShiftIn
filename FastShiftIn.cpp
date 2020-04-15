@@ -16,6 +16,8 @@ FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const ui
     pinMode(datapin, INPUT);
     pinMode(clockpin, OUTPUT);
 
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+
     // uint8_t _datatimer  = digitalPinToTimer(datapin);
     // if (_datatimer != NOT_ON_TIMER) turnOffPWM(_datatimer); TODO
     uint8_t _dataport   = digitalPinToPort(datapin);
@@ -27,39 +29,26 @@ FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const ui
     uint8_t _clockport  = digitalPinToPort(clockpin);
     _clockin = portOutputRegister(_clockport);
     _clockbit = digitalPinToBitMask(clockpin);
-}
 
+#else   // reference implementation
+
+	// reuse these vars as pin to save some space
+    _databit = datapin;
+    _clockbit = clockpin;
+
+#endif
+}
 
 int FastShiftIn::read()
 {
-    uint8_t value = 0;
-	uint8_t cbmask1 = _clockbit;
-	uint8_t cbmask2 = ~_clockbit;
-	uint8_t dbmask = _databit;
-
-    for (uint8_t i = 0, m = 1, n = 128; i < 8; i++, m <<= 1, n >>= 1)
-    {
-        uint8_t oldSREG = SREG;
-        cli();
-        *_clockin |= cbmask1;
-
-        if ((*_datain & dbmask) > 0)
-        {
-            if (_bitorder == LSBFIRST)
-            {
-              value |= m;
-            }
-            else
-            {
-              value |= n;
-            }
-        }
-        *_clockin &= cbmask2;
-        SREG = oldSREG;
-    }
-    _value = value;
-    return _value;
+    if (_bitorder == LSBFIRST)
+	{
+		return readLSBFIRST();
+	}
+	return readMSBFIRST();
 }
+
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
 
 int FastShiftIn::readLSBFIRST()
 {
@@ -107,5 +96,19 @@ int FastShiftIn::readMSBFIRST()
     _value = value;
     return _value;
 }
+
+#else  // reference implementation  // note this has no cli()
+
+int FastShiftIn::readLSBFIRST()
+{
+	return shiftIn(_databit, _clockbit, LSBFIRST);
+}
+
+int FastShiftIn::readMSBFIRST()
+{
+	return shiftIn(_databit, _clockbit, MSBFIRST);
+}
+
+#endif
 
 // -- END OF FILE --

@@ -12,9 +12,9 @@ example fastShiftIn: 0.2.0
 
 
 Performance - time in us : read()
-FastShiftIn1: 22.00
-FastShiftIn2: 42.87
-       Delta: 20.87
+FastShiftIn1: 20.43
+FastShiftIn2: 39.72
+       Delta: 19.29
 
 
 Performance - time in us : readLSBFIRST()
@@ -30,12 +30,11 @@ FastShiftIn2: 38.84
 
 
 Performance - time in us : reference shiftIn()
-Standard shiftIn1: 108.58
-Standard shiftIn2: 216.44
-            Delta: 107.86
+Standard shiftIn1: 108.61
+Standard shiftIn2: 216.43
+            Delta: 107.82
 
 done...
-
 
 ==============================
 

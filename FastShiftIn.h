@@ -8,11 +8,6 @@
 //     URL: https://github.com/RobTillaart/FastShiftIn.git
 //
 
-#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
-#else
-#error "FastShiftIn: only AVR supported,"
-#endif
-
 #include "Arduino.h"
 
 #define FASTSHIFTIN_LIB_VERSION 	"0.2.0"
@@ -20,10 +15,8 @@
 class FastShiftIn
 {
 public:
-    // bitorder = { LSBFIRST, MSBFIRST };  // bitorder will become obsolete in the future
+    // bitorder = { LSBFIRST, MSBFIRST };
     FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const uint8_t bitOrder = LSBFIRST);
-	
-	// read() will become obsolete in the future
     int read(void);
 	
 	// overrule bitorder (most optimized).
