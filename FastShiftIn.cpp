@@ -14,8 +14,7 @@ FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const ui
     _bitorder = bitOrder;
 
     pinMode(datapin, INPUT);
-    pinMode(clockpin, INPUT);
-
+    pinMode(clockpin, OUTPUT);
 
     // uint8_t _datatimer  = digitalPinToTimer(datapin);
     // if (_datatimer != NOT_ON_TIMER) turnOffPWM(_datatimer); TODO
