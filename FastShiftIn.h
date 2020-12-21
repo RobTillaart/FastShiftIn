@@ -21,7 +21,7 @@ public:
   int     read(void);
   int     lastRead(void)    { return _value; };
 
-  bool    setBitOrder(const uint8_t bitOrder) { _bitorder = bitOrder; };
+  bool    setBitOrder(const uint8_t bitOrder);
   uint8_t getBitOrder(void) { return _bitorder; };
 
   // overrule bitorder (most optimized).
