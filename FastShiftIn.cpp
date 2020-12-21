@@ -1,7 +1,7 @@
 //
 //    FILE: FastShiftIn.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.1
+// VERSION: 0.2.2
 // PURPOSE: Fast ShiftIn for 74HC165 register, AVR optimized
 //    DATE: 2013-09-29
 //     URL: https://github.com/RobTillaart/FastShiftIn
@@ -12,7 +12,7 @@
 FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const uint8_t bitOrder)
 {
   _bitorder = bitOrder;
-
+  _value    = 0;
   pinMode(datapin, INPUT);
   pinMode(clockpin, OUTPUT);
 
@@ -48,14 +48,13 @@ int FastShiftIn::read()
   return readMSBFIRST();
 }
 
-#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
-
 int FastShiftIn::readLSBFIRST()
 {
-  uint8_t value = 0;
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+  uint8_t value   = 0;
   uint8_t cbmask1 = _clockbit;
   uint8_t cbmask2 = ~_clockbit;
-  uint8_t dbmask = _databit;
+  uint8_t dbmask  = _databit;
 
   for (uint8_t m = 1; m > 0; m <<= 1)
   {
@@ -71,14 +70,21 @@ int FastShiftIn::readLSBFIRST()
   }
   _value = value;
   return _value;
+  
+#else   // reference implementation
+
+  _value = shiftIn(_databit, _clockbit, LSBFIRST);
+   return _value;
+#endif
 }
 
 int FastShiftIn::readMSBFIRST()
 {
-  uint8_t value = 0;
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+  uint8_t value   = 0;
   uint8_t cbmask1 = _clockbit;
   uint8_t cbmask2 = ~cbmask1;
-  uint8_t dbmask = _databit;
+  uint8_t dbmask  = _databit;
 
   for (uint8_t n = 128; n > 0; n >>= 1)
   {
@@ -94,20 +100,22 @@ int FastShiftIn::readMSBFIRST()
   }
   _value = value;
   return _value;
-}
+  
+#else   // reference implementation
 
-#else  // reference implementation - note this has no cli()
-
-int FastShiftIn::readLSBFIRST()
-{
-  return shiftIn(_databit, _clockbit, LSBFIRST);
-}
-
-int FastShiftIn::readMSBFIRST()
-{
-  return shiftIn(_databit, _clockbit, MSBFIRST);
-}
-
+  _value = shiftIn(_databit, _clockbit, MSBFIRST);
+   return _value;
 #endif
+}
+
+bool FastShiftIn::setBitOrder(const uint8_t bitOrder)
+{
+  if (bitOrder == LSBFIRST) || (bitOrder == MSBFIRST))
+  {
+    _bitorder = bitOrder; 
+    return true;
+  };
+  return false;
+}
 
 // -- END OF FILE --
