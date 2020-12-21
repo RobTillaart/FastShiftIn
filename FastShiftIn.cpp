@@ -59,7 +59,7 @@ int FastShiftIn::readLSBFIRST()
   for (uint8_t m = 1; m > 0; m <<= 1)
   {
     uint8_t oldSREG = SREG;
-    cli();
+    noInterrupts();
     *_clockin |= cbmask1;
     if ((*_datain & dbmask) > 0)
     {
@@ -89,7 +89,7 @@ int FastShiftIn::readMSBFIRST()
   for (uint8_t n = 128; n > 0; n >>= 1)
   {
     uint8_t oldSREG = SREG;
-    cli();
+    noInterrupts();
     *_clockin |= cbmask1;
     if ((*_datain & dbmask) > 0)
     {
