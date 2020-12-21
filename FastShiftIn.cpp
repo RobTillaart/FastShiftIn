@@ -110,7 +110,7 @@ int FastShiftIn::readMSBFIRST()
 
 bool FastShiftIn::setBitOrder(const uint8_t bitOrder)
 {
-  if (bitOrder == LSBFIRST) || (bitOrder == MSBFIRST))
+  if ((bitOrder == LSBFIRST) || (bitOrder == MSBFIRST))
   {
     _bitorder = bitOrder; 
     return true;
