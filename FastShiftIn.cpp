@@ -15,6 +15,8 @@ FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const ui
   _value    = 0;
   pinMode(datapin, INPUT);
   pinMode(clockpin, OUTPUT);
+  // https://www.arduino.cc/reference/en/language/functions/advanced-io/shiftin/
+  digitalWrite(clockpin, LOW);  // assume rising pulses from clock 
 
 #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
 
@@ -32,7 +34,7 @@ FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const ui
 
 #else   // reference implementation
 
-  // reuse these vars as pin to save some space
+  // reuse these local vars as pin to save some space
   _databit = datapin;
   _clockbit = clockpin;
 

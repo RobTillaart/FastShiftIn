@@ -25,8 +25,8 @@ public:
   uint8_t getBitOrder(void) { return _bitorder; };
 
   // overrule bitorder (most optimized).
-  int readLSBFIRST(void);
-  int readMSBFIRST(void);
+  int     readLSBFIRST(void);
+  int     readMSBFIRST(void);
 
 private:
   uint8_t _bitorder;
