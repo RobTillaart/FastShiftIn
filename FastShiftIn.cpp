@@ -9,6 +9,20 @@
 
 #include "FastShiftIn.h"
 
+
+// PATCH FOR DUE & ZERO FOR UNIT TEST - https://github.com/Arduino-CI/arduino_ci/issues/252
+#if defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_SAMD)
+// - due         #  ARDUINO_ARCH_SAM    does not support shiftIn apparently
+// - zero        #  ARDUINO_ARCH_SAMD   
+
+uint8_t shiftIn(uint8_t dp, uint8_t cp, uint8_t bo)
+{
+  return 0xFF;
+}
+#endif
+
+
+
 FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const uint8_t bitOrder)
 {
   _bitorder = bitOrder;
