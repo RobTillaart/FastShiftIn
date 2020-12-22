@@ -38,6 +38,9 @@ unittest_teardown()
 {
 }
 
+    // - due         # does not support shiftIn apparently
+    // - zero        #    ARDUINO_ARCH_SAMD   
+
 
 unittest(test_constructor)
 {
