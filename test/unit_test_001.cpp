@@ -97,9 +97,9 @@ unittest(test_read)
 
   fprintf(stderr, "VERSION:\t%s\n", FASTSHIFTIN_LIB_VERSION);
 
-  assertEqual(0, FSI.read());
-  assertEqual(0, FSI.readLSBFIRST());
-  assertEqual(0, FSI.readMSBFIRST());
+  assertEqual(255, FSI.read());
+  assertEqual(255, FSI.readLSBFIRST());
+  assertEqual(255, FSI.readMSBFIRST());
 }
 
 
