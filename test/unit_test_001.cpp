@@ -28,6 +28,8 @@
 #define assertEqualNAN(arg)  assertOp("assertEqualNAN", "expected", true, compareEqual, "==", "actual", isnan(arg))
 
 
+
+
 #include "FastShiftIn.h"
 
 unittest_setup()
@@ -38,9 +40,17 @@ unittest_teardown()
 {
 }
 
-    // - due         # does not support shiftIn apparently
-    // - zero        #    ARDUINO_ARCH_SAMD   
+// PATCH FOR DUE & ZERO - https://github.com/Arduino-CI/arduino_ci/issues/252
 
+#if defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_SAMD)
+// - due         #  ARDUINO_ARCH_SAM    does not support shiftIn apparently
+// - zero        #  ARDUINO_ARCH_SAMD   
+
+uint8_t shiftIn(uint8_t dp, uint8_t cp, uint8_t bo)
+{
+  return 0xFF;
+}
+#endif
 
 unittest(test_constructor)
 {
