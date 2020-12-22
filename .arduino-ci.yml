@@ -3,5 +3,5 @@ compile:
   platforms:
     - uno
     - leonardo
-    - due
-    - zero
+#   - due         # does not support shiftIn apparently
+#   - zero        #    ARDUINO_ARCH_SAMD   
