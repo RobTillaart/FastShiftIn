@@ -4,4 +4,4 @@ compile:
     - uno
     - leonardo
 #   - due         # does not support shiftIn apparently
-    - zero
+#   - zero        #    ARDUINO_ARCH_SAMD   
