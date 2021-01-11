@@ -8,9 +8,12 @@
 //     URL: https://github.com/RobTillaart/FastShiftIn
 //
 
+
 #include "Arduino.h"
 
+
 #define FASTSHIFTIN_LIB_VERSION (F("0.2.2"))
+
 
 class FastShiftIn
 {
