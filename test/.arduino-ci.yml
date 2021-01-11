@@ -3,4 +3,6 @@ compile:
   platforms:
     - uno
     - leonardo
+    - zero
+    - due
 
