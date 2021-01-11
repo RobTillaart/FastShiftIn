@@ -5,7 +5,7 @@
 // PURPOSE: Fast ShiftIn for 74HC165 register, AVR optimized
 //    DATE: 2013-09-29
 //     URL: https://github.com/RobTillaart/FastShiftIn
-//
+
 
 #include "FastShiftIn.h"
 
@@ -33,8 +33,9 @@ FastShiftIn::FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const ui
   _clockin = portOutputRegister(_clockport);
   _clockbit = digitalPinToBitMask(clockpin);
 
-#else   // reference implementation
+#else
 
+  // reference implementation
   // reuse these local vars as pin to save some space
   _databit = datapin;
   _clockbit = clockpin;
@@ -54,6 +55,7 @@ int FastShiftIn::read()
 int FastShiftIn::readLSBFIRST()
 {
 #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+
   uint8_t value   = 0;
   uint8_t cbmask1 = _clockbit;
   uint8_t cbmask2 = ~_clockbit;
@@ -73,17 +75,20 @@ int FastShiftIn::readLSBFIRST()
   }
   _value = value;
   return _value;
-  
-#else   // reference implementation
 
+#else
+
+  // reference implementation
   _value = shiftIn(_databit, _clockbit, LSBFIRST);
-   return _value;
+  return _value;
+
 #endif
 }
 
 int FastShiftIn::readMSBFIRST()
 {
 #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+
   uint8_t value   = 0;
   uint8_t cbmask1 = _clockbit;
   uint8_t cbmask2 = ~cbmask1;
@@ -103,11 +108,13 @@ int FastShiftIn::readMSBFIRST()
   }
   _value = value;
   return _value;
-  
-#else   // reference implementation
 
+#else
+
+  // reference implementation
   _value = shiftIn(_databit, _clockbit, MSBFIRST);
-   return _value;
+  return _value;
+
 #endif
 }
 
