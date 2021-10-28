@@ -18,7 +18,7 @@
 class FastShiftIn
 {
 public:
-  // bitorder = { LSBFIRST, MSBFIRST };
+  // bitOrder = { LSBFIRST, MSBFIRST };
   FastShiftIn(const uint8_t datapin, const uint8_t clockpin, const uint8_t bitOrder = LSBFIRST);
 
   int     read(void);
@@ -27,7 +27,7 @@ public:
   bool    setBitOrder(const uint8_t bitOrder);
   uint8_t getBitOrder(void) { return _bitorder; };
 
-  // overrule bitorder (most optimized).
+  // overrule bitOrder (most optimized).
   int     readLSBFIRST(void);
   int     readMSBFIRST(void);
 
@@ -41,5 +41,6 @@ private:
   uint8_t _clockbit;
   volatile uint8_t *_clockin;
 };
+
 
 // -- END OF FILE --
