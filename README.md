@@ -8,7 +8,7 @@
 
 # FastShiftIn
 
-Arduino library for (AVR) optimized shiftIn - e.g. for 74HC165
+Arduino library for **AVR** optimized shiftIn - e.g. for 74HC165.
 
 A library for FastShiftOut also exist - https://github.com/RobTillaart/FastShiftOut
 
@@ -61,3 +61,5 @@ See examples
 - esp32 optimization readLSBFIRST readMSBFIRST
 - read8() read16(), read24(), read32() 
 - **read(uint8_t \* arr, uint8_t nr)** ??
+- example schema
+
