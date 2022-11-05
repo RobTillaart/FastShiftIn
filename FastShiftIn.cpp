@@ -34,7 +34,6 @@ FastShiftIn::FastShiftIn(uint8_t dataIn, uint8_t clockPin, uint8_t bitOrder)
 #else
 
   _dataPinIn  = dataIn;
-  _dataPinOut = dataOut;
   _clockPin   = clockPin;
 
 #endif
