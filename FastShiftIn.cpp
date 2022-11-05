@@ -66,11 +66,11 @@ int FastShiftIn::readLSBFIRST()
   {
     uint8_t oldSREG = SREG;
     noInterrupts();
-    // write one bit
+    //  clock pulse
     *_clockRegister |= cbmask1;
+    *_clockRegister &= cbmask2;
     //  read one bit
     if ((*_dataInRegister & inmask1) > 0) rv |= m;
-    *_clockRegister &= cbmask2;
     SREG = oldSREG;
   }
   _value = rv;
@@ -99,11 +99,11 @@ int FastShiftIn::readMSBFIRST()
   {
     uint8_t oldSREG = SREG;
     noInterrupts();
-    // write one bit
+    //  clock pulse
     *_clockRegister |= cbmask1;
+    *_clockRegister &= cbmask2;
     //  read one bit
     if ((*_dataInRegister & inmask1) > 0) rv |= m;
-    *_clockRegister &= cbmask2;
     SREG = oldSREG;
   }
   _value = rv;
