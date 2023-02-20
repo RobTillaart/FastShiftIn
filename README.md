@@ -38,9 +38,7 @@ The performance of **read()** is substantially faster than the default Arduino
 Exact how big the performance gain is can be seen with the example sketch.
 It does a comparison and shows how the class is to be used.
 
-Time in microseconds
-
-test 0.2.3  Arduino UNO
+Time in microseconds, Arduino UNO
 
 |  function            |   0.2.3  |   0.3.2  |
 |:---------------------|---------:|---------:|
@@ -60,8 +58,13 @@ faster than the reference.
 
 ## Interface
 
-The interface exists of the following functions:
+```cpp
+#include "FastShiftIn.h"
+```
 
+#### Functions
+
+- **FastShiftIn(uint8_t dataIn, uint8_t clockPin, uint8_t bitOrder = LSBFIRST)** Constructor
 - **uint16_t read(void)** reads a new value, 8 bit.
 - **uint16_t read16(void)** reads a new value, 16 bit.
 - **uint32_t read24(void)** reads a new value, 24 bit.
@@ -74,7 +77,7 @@ Returns false for other values.
 - **uint16_t readMSBFIRST(void)**  optimized MSB read(), 8 bit.
 
 
-#### byte order
+#### Byte order
 
 It might be that **read16/24/32** has bytes not in the right order.
 Then you should use multiple calls to **read()** and merge these
