@@ -26,7 +26,7 @@ public:
   uint32_t read32(void);
   uint32_t lastRead(void);
 
-  //  retuns false if bitOrder out of range.
+  //  returns false if bitOrder out of range.
   bool     setBitOrder(uint8_t bitOrder);
   uint8_t  getBitOrder(void);
 
