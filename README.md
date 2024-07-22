@@ -13,12 +13,6 @@
 
 Arduino library for **AVR** optimized shiftIn - e.g. for 74HC165.
 
-Related libraries
-- https://github.com/RobTillaart/FastShiftOut
-- https://github.com/RobTillaart/FastShiftInOut
-- https://github.com/RobTillaart/ShiftInSlow
-- https://github.com/RobTillaart/ShiftOutSlow
-
 
 ## Description
 
@@ -57,6 +51,12 @@ Time in microseconds, Arduino UNO
 0.3.2 is a bit slower (incl. reference) than 0.2.3 but still much
 faster than the reference.
 
+### Related libraries
+
+- https://github.com/RobTillaart/FastShiftOut
+- https://github.com/RobTillaart/FastShiftInOut
+- https://github.com/RobTillaart/ShiftInSlow
+- https://github.com/RobTillaart/ShiftOutSlow
 
 
 ## Interface
@@ -65,9 +65,12 @@ faster than the reference.
 #include "FastShiftIn.h"
 ```
 
-#### Functions
+### Constructor
 
 - **FastShiftIn(uint8_t dataIn, uint8_t clockPin, uint8_t bitOrder = LSBFIRST)** Constructor
+
+### Functions
+
 - **uint16_t read(void)** reads a new value, 8 bit.
 - **uint16_t read16(void)** reads a new value, 16 bit.
 - **uint32_t read24(void)** reads a new value, 24 bit.
@@ -80,11 +83,27 @@ Returns false for other values.
 - **uint16_t readMSBFIRST(void)**  optimized MSB read(), 8 bit.
 
 
-#### Byte order
+### Experimental
 
-It might be that **read16/24/32** has bytes not in the right order.
-Then you should use multiple calls to **read()** and merge these
-bytes in the order you want them.
+- **void read(uint8_t \*array, uint8_t size)** read an array of values.
+The order in the array follows as BYTE order MSB / LSB, that is why this function
+is made experimental. This might change in the future, and fill the array
+in arrival order.
+
+
+### Byte order
+
+The functions **read16()**, **read24()** and **read32()** of this library assume
+that the BIT-order is also the BYTE-order.
+This is not always the case as an n-byte element can have n! == factorial(n)
+distinct byte orders. 
+So **read16()** can have two, **read24()** can have six and **read32()** can even have 
+(in theory) 24 distinct byte orders. Although LSB and MSB are the most common,
+other byte orders exist, and sometimes one explicitly wants to reorder the bytes.
+
+If the BIT-order is not the BYTE-order, the user has two options
+- call **read()** multiple times and merge the bytes in the order needed.
+- call **read32()** (a.o) and reorder the bytes in a separate function.
 
 
 ## Notes
@@ -104,8 +123,13 @@ pull up resistors, especially if wires are exceeding 10 cm (4").
 
 #### Could
 
+- investigate separate **BYTE**-order, 
+  - only MSBFirst and LSBFirst
+  - **void setByteOrder()** + **uint8_t getByteOrder()**
+  - other option is add parameters / overload to make byte order explicit
+    - **read32(1,0,3,2)** performance penalty + invalid combination.
 - esp32 optimization readLSBFIRST readMSBFIRST
-- **read(uint8_t \* arr, uint8_t nr)** ??
+
 - example schema
 - would it be interesting to make a fastShiftIn16() etc?
   - squeeze performance but more maintenance.?
