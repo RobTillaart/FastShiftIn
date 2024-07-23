@@ -22,17 +22,22 @@ It speeds up the shift using low level ports and masks. These are predetermined
 in the constructor of the FastShiftIn object.
 
 If not an **ARDUINO_ARCH_AVR** or **ARDUINO_ARCH_MEGAAVR** the class falls back 
-to the default shiftIn() implementation.
+to the default **shiftIn()** implementation.
 
-Since 0.3.2 read16(), read24() and read32() are added.
-These are experimental and not fully tested yet.
+The library allows to set (and get) the bitOrder and apply this to multiple read()
+calls. It also provide access to **readLSBFIRST()** and **readMSBFIRST()** which 
+are the low level workers and most optimized code (so far). 
+
+The library provides wrapper functions to read multi-byte variables. 
+These are read16(), read24(), read32() and read(array, size).
+The latter is used to shift in any size object.
 
 
-## Performance
+### Performance
 
-The performance of **read()** is substantially faster than the default Arduino 
-**shiftIn()**, but not as fast as HW SPI. 
-Exact how big the performance gain is can be seen with the example sketch.
+The performance of **read()** is substantially faster for **AVR** than the default 
+Arduino **shiftIn()**, but not as fast as HW SPI. 
+Exact how large the performance gain is can be seen with the example sketch.
 It does a comparison and shows how the class is to be used.
 
 Time in microseconds, Arduino UNO
@@ -51,8 +56,10 @@ Time in microseconds, Arduino UNO
 0.3.2 is a bit slower (incl. reference) than 0.2.3 but still much
 faster than the reference.
 
+
 ### Related libraries
 
+- https://github.com/RobTillaart/FastShiftIn
 - https://github.com/RobTillaart/FastShiftOut
 - https://github.com/RobTillaart/FastShiftInOut
 - https://github.com/RobTillaart/ShiftInSlow
@@ -76,6 +83,9 @@ faster than the reference.
 - **uint32_t read24(void)** reads a new value, 24 bit.
 - **uint32_t read32(void)** reads a new value, 32 bit.
 - **uint32_t lastRead()** returns last value read.
+
+### Meta
+
 - **bool setBitOrder(uint8_t bitOrder)** set LSBFIRST or MSBFIRST. 
 Returns false for other values.
 - **uint8_t getBitOrder(void)** returns LSBFIRST or MSBFIRST.
@@ -96,7 +106,8 @@ in arrival order.
 The functions **read16()**, **read24()** and **read32()** of this library assume
 that the BIT-order is also the BYTE-order.
 This is not always the case as an n-byte element can have n! == factorial(n)
-distinct byte orders. 
+distinct byte orders.
+
 So **read16()** can have two, **read24()** can have six and **read32()** can even have 
 (in theory) 24 distinct byte orders. Although LSB and MSB are the most common,
 other byte orders exist, and sometimes one explicitly wants to reorder the bytes.
@@ -117,6 +128,7 @@ pull up resistors, especially if wires are exceeding 10 cm (4").
 
 #### Must
 
+
 #### Should
 
 - extend unit tests
@@ -128,9 +140,8 @@ pull up resistors, especially if wires are exceeding 10 cm (4").
   - **void setByteOrder()** + **uint8_t getByteOrder()**
   - other option is add parameters / overload to make byte order explicit
     - **read32(1,0,3,2)** performance penalty + invalid combination.
-- esp32 optimization readLSBFIRST readMSBFIRST
-
-- example schema
+- investigate ESP32 optimization readLSBFIRST readMSBFIRST
+- example schemas
 - would it be interesting to make a fastShiftIn16() etc?
   - squeeze performance but more maintenance.?
 

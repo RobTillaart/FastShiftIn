@@ -153,7 +153,7 @@ uint8_t FastShiftIn::readLSBFIRST()
   uint8_t cbmask2  = ~_clockBit;
   uint8_t inmask1  = _dataInBit;
 
-  for (uint8_t m = 1; m > 0; m <<= 1)
+  for (uint8_t m = 0x01; m > 0; m <<= 1)
   {
     //  remember state register
     uint8_t oldSREG = SREG;
