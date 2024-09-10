@@ -148,6 +148,55 @@ uint8_t FastShiftIn::readLSBFIRST()
 {
 #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
 
+#if defined(FASTSHIFTIN_AVR_LOOP_UNROLLED)  //  AVR SPEED OPTIMIZED  #17
+
+  uint8_t rv       = 0;
+  uint8_t cbmask1  = _clockBit;
+  //  uint8_t cbmask2  = ~_clockBit;
+  uint8_t inmask1  = _dataInBit;
+
+  //  disable interrupts (for all bits)
+  uint8_t oldSREG = SREG;
+  noInterrupts();
+
+  uint8_t r = *_clockRegister;
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x01;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x02;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x04;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x08;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x10;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x20;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x40;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x80;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  //  restore interrupt state
+  SREG = oldSREG;
+
+#else  //  AVR SIZE OPTIMIZED
+
   uint8_t rv       = 0;
   uint8_t cbmask1  = _clockBit;
   uint8_t cbmask2  = ~_clockBit;
@@ -171,7 +220,9 @@ uint8_t FastShiftIn::readLSBFIRST()
   _lastValue = rv;
   return rv;
 
-#else
+#endif  //  if (AVR)
+
+#else   //  other platforms reference shiftOut()
 
   //  reference implementation
   _lastValue = shiftIn(_dataPinIn, _clockPin, LSBFIRST);
@@ -184,6 +235,55 @@ uint8_t FastShiftIn::readLSBFIRST()
 uint8_t FastShiftIn::readMSBFIRST()
 {
 #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_MEGAAVR)
+
+#if defined(FASTSHIFTIN_AVR_LOOP_UNROLLED)  //  AVR SPEED OPTIMIZED
+
+  uint8_t rv       = 0;
+  uint8_t cbmask1  = _clockBit;
+  //  uint8_t cbmask2  = ~_clockBit;
+  uint8_t inmask1  = _dataInBit;
+
+  //  disable interrupts (for all bits)
+  uint8_t oldSREG = SREG;
+  noInterrupts();
+
+  uint8_t r = * _clockRegister;
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x80;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x40;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x20;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x10;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x08;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x04;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x02;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  *_clockRegister |= cbmask1;  //  clock pulse HIGH
+  if ((*_dataInRegister & inmask1) > 0) rv |= 0x01;  //  read one bit
+  *_clockRegister = r;         //  clock pulse LOW
+
+  //  restore interrupt state
+  SREG = oldSREG;
+
+#else  //  AVR SIZE OPTIMIZED
 
   uint8_t rv       = 0;
   uint8_t cbmask1  = _clockBit;
@@ -208,7 +308,9 @@ uint8_t FastShiftIn::readMSBFIRST()
   _lastValue = rv;
   return rv;
 
-#else
+#endif  //  if (AVR)
+
+#else   //  other platforms reference shiftOut()
 
   //  reference implementation
   _lastValue = shiftIn(_dataPinIn, _clockPin, MSBFIRST);
