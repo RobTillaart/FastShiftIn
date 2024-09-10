@@ -36,7 +36,9 @@ The latter is used to shift in any size object.
 ### 0.4.0 breaking changes
 
 The 0.4.0 version has a flag to unroll the inner loop in **readLSBFIRST()**
-and **readMSBFIRST()**. Note: this optimization is new and thus experimental.
+and **readMSBFIRST()**. The unrolled loop blocks the interrupts per byte.
+
+Note: this optimization is new and thus experimental.
 Feedback, including improvements, is welcome.
 
 
@@ -68,8 +70,8 @@ Indicative time in microseconds, Arduino UNO, IDE 1.8.19, measured over 1000 cal
 - Note: 0.3.2 is a bit slower (incl. reference) than 0.2.3 but still much
 faster than the reference. (Older IDE?)
 - Note: 0.4.0 improved test sketch, 
-- Note: 0.4.0L measured with loop unrolled flag enabled. 
 - Note: 0.4.0 measured with loop unroll flag disabled.
+- Note: 0.4.0L measured with loop unrolled flag enabled. (~40% faster)
 
 
 ### Related libraries
@@ -89,6 +91,8 @@ faster than the reference. (Older IDE?)
 
 ### Constructor
 
+bitOrder = { LSBFIRST, MSBFIRST };
+
 - **FastShiftIn(uint8_t dataIn, uint8_t clockPin, uint8_t bitOrder = LSBFIRST)** Constructor
 
 ### Functions
@@ -98,16 +102,16 @@ faster than the reference. (Older IDE?)
 - **uint32_t read24(void)** reads a new value, 24 bit.
 - **uint32_t read32(void)** reads a new value, 32 bit.
 - **uint32_t lastRead()** returns last value read.
+- **uint16_t readLSBFIRST(void)**  optimized LSB read(), 8 bit.
+- **uint16_t readMSBFIRST(void)**  optimized MSB read(), 8 bit.
 
 
-### Meta
+### BitOrder
 
 - **bool setBitOrder(uint8_t bitOrder)** set LSBFIRST or MSBFIRST. 
 Returns false for other values ==> no change.
 - **uint8_t getBitOrder(void)** returns LSBFIRST or MSBFIRST as set in the constructor
 or latest set from **setBitOrder()**.
-- **uint16_t readLSBFIRST(void)**  optimized LSB read(), 8 bit.
-- **uint16_t readMSBFIRST(void)**  optimized MSB read(), 8 bit.
 
 
 ### Experimental
