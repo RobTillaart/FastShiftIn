@@ -197,6 +197,8 @@ uint8_t FastShiftIn::readLSBFIRST()
   //  restore interrupt state
   SREG = oldSREG;
 
+  _lastValue = rv;
+
 #else  //  AVR SIZE OPTIMIZED
 
   uint8_t rv       = 0;
@@ -225,17 +227,18 @@ uint8_t FastShiftIn::readLSBFIRST()
   //  reset interrupts flag to previous state
   SREG = oldSREG;
 
+  _lastValue = rv;
+
 #endif  //  if (AVR)
 
 #else   //  other platforms reference shiftOut()
 
   //  reference implementation
-  rv = shiftIn(_dataPinIn, _clockPin, LSBFIRST);
+  _lastValue = shiftIn(_dataPinIn, _clockPin, LSBFIRST);
 
 #endif
 
   //  all paths will return _lastValue.
-  _lastValue = rv;
   return _lastValue;
 }
 
@@ -293,6 +296,8 @@ uint8_t FastShiftIn::readMSBFIRST()
   //  restore interrupt state
   SREG = oldSREG;
 
+  _lastValue = rv;
+
 #else  //  AVR SIZE OPTIMIZED
 
   uint8_t rv      = 0;
@@ -320,17 +325,18 @@ uint8_t FastShiftIn::readMSBFIRST()
   //  reset interrupts flag to previous state
   SREG = oldSREG;
 
+  _lastValue = rv;
+
 #endif  //  if (AVR)
 
 #else   //  other platforms reference shiftOut()
 
   //  reference implementation
-  rv = shiftIn(_dataPinIn, _clockPin, MSBFIRST);
+  _lastValue = shiftIn(_dataPinIn, _clockPin, MSBFIRST);
 
 #endif
 
   //  all paths will return _lastValue.
-  _lastValue = rv;
   return _lastValue;
 }
 
