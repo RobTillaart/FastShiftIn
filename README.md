@@ -36,7 +36,7 @@ The latter is used to shift in any size object.
 ### 0.4.0 breaking changes
 
 The 0.4.0 version has a flag to unroll the inner loop in **readLSBFIRST()**
-and **readMSBFIRST()**. The unrolled loop blocks the interrupts per byte.
+and **readMSBFIRST()**. The AVR optimized code blocks the interrupts per byte.
 
 Note: this optimization is new and thus experimental.
 Feedback, including improvements, is welcome.
@@ -58,20 +58,20 @@ Indicative time in microseconds, Arduino UNO, IDE 1.8.19, measured over 1000 cal
 
 |  function            |   0.2.3  |   0.3.2  |   0.4.0  |  0.4.0L  |
 |:---------------------|---------:|---------:|---------:|---------:|
-|  read()              |   19.30  |   20.49  |   20.57  |   12.40  |
-|  read16()            |          |   41.04  |   41.11  |   25.64  |
-|  read24()            |          |   62.91  |   62.68  |   39.47  |
-|  read32()            |          |   83.95  |   82.86  |   51.92  |
-|  readLSBFIRST()      |   19.04  |   19.92  |   19.82  |   12.08  |
-|  readMSBFIRST()      |   19.04  |   19.92  |   19.81  |   12.07  |
-|  reference shiftIn() |  107.82  |  108.20  |  108.20  |  108.05  |
+|  read()              |   19.30  |   20.49  |   12.71  |    9.51  |
+|  read16()            |          |   41.04  |   25.39  |   18.98  |
+|  read24()            |          |   62.91  |   39.10  |   29.48  |
+|  read32()            |          |   83.95  |   51.42  |   38.60  |
+|  readLSBFIRST()      |   19.04  |   19.92  |   11.96  |    8.81  |
+|  readMSBFIRST()      |   19.04  |   19.92  |   11.94  |    8.75  |
+|  reference shiftIn() |  107.82  |  108.20  |  108.05  |  108.05  |
 
 
 - Note: 0.3.2 is a bit slower (incl. reference) than 0.2.3 but still much
 faster than the reference. (Older IDE?)
 - Note: 0.4.0 improved test sketch, 
 - Note: 0.4.0 measured with loop unroll flag disabled.
-- Note: 0.4.0L measured with loop unrolled flag enabled. (~40% faster)
+- Note: 0.4.0L measured with loop unrolled flag enabled.
 
 
 ### Related libraries
